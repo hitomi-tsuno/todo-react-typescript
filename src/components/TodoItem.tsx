@@ -18,6 +18,7 @@ const TodoItem: React.FC<Props> = ({ todo, toggleTodo, deleteTodo }) => {
       >
         {todo.text}
       </span>
+      {/* 削除ボタン */}
       <button
         onClick={(e) => {
           e.stopPropagation(); // ← これがポイント！
