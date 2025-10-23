@@ -10,6 +10,8 @@ const App: React.FC = () => {
   const [text, setText] = useState(""); // 入力中のテキスト
   const [filter, setFilter] = useState<Filter>("all"); // フィルター状態の管理
   const [isInitialized, setIsInitialized] = useState(false); // ← 初期化フラグ 初期時に保存が実行され、todosがクリアされるために追加しています。
+  const [showPopup, setShowPopup] = useState(false); // ポップアップの表示状態
+  const checkedCount = todos.filter((todo) => todo.checked).length; // 完了済みのTODO数
 
   /**
    * 初期読み込み
@@ -54,9 +56,40 @@ const App: React.FC = () => {
       id: Date.now(),
       text,
       checked: false,
+      createdAt: new Date().toLocaleString(), // 作成日時
     };
     setTodos([...todos, newTodo]);
     setText("");
+  };
+
+  /**
+   * TODO一括削除処理
+   * 「一括削除」ボタン押下時に実行
+   */
+  const alldeleteTodo = () => {
+    console.log("一括削除実行");
+    // 完了済みのTodoを除外して新しい配列を作成
+    const remainingTodos = todos.filter((todo) => !todo.checked);
+    setTodos(remainingTodos);
+    setShowPopup(false); // 削除後にポップアップを非表示にする
+  };
+
+  /**
+   * TODO一括完了処理
+   * 「一括完了」ボタン押下時に実行
+   */
+  const checkAllTodos = () => {
+    const updated = todos.map((todo) => ({ ...todo, checked: true }));
+    setTodos(updated);
+  };
+
+  /**
+   * TODO一括未完了処理
+   * 「一括未完了」ボタン押下時に実行
+   */
+  const uncheckAllTodos = () => {
+    const updated = todos.map((todo) => ({ ...todo, checked: false }));
+    setTodos(updated);
   };
 
   /**
@@ -78,7 +111,7 @@ const App: React.FC = () => {
       )
     );
   };
-  
+
   // フィルター切り替え処理
   const handleFilter = (filter: Filter) => {
     setFilter(filter);
@@ -123,6 +156,31 @@ const App: React.FC = () => {
       {/* 追加ボタン */}
       <button onClick={addTodo}>追加</button>
 
+      {/* 一括削除ボタン 削除件数＞0の場合のみ一括ボタンを表示する。*/}
+      {checkedCount > 0 && (
+        <button onClick={() => setShowPopup(true)}>
+          一括削除 対象：{checkedCount}件
+        </button>
+      )}
+
+      {/* ポップアップコンポーネント */}
+      {showPopup && (
+        <div className="popup">
+          <p>完了済みのタスクをすべて削除しますか？</p>
+          <button onClick={() => alldeleteTodo()}>はい</button>
+          <button onClick={() => setShowPopup(false)}>いいえ</button>
+        </div>
+      )}
+
+      <br />
+      {/* 一括完了・未完了ボタン */}
+      {todos.length > 0 &&
+        (checkedCount === todos.length ? (
+          <button onClick={uncheckAllTodos}>すべて未完了にする</button>
+        ) : (
+          <button onClick={checkAllTodos}>すべて完了にする</button>
+        ))}
+  
       {/* 一覧 */}
       <TodoList
         todos={todos}

@@ -29,6 +29,10 @@ const TodoItem: React.FC<Props> = ({
       {/* TODOの内容 */}
       <span>{todo.text}</span>
 
+      <span style={{ marginLeft: "10px", fontSize: "0.8em", color: "#666" }}>
+        登録日時: {todo.createdAt}
+      </span>
+
       {/* 削除ボタン */}
       <button
         onClick={(e) => {
