@@ -1,6 +1,8 @@
 import React from "react";
 import { Todo } from "../types/todo";
-import { Filter } from "../types/filter";
+import StyledButton from "../components/StyledButton";
+import StyledDate from "../components/StyledDate";
+import StyledText from "../components/StyledText";
 
 interface Props {
   todo: Todo;
@@ -22,26 +24,23 @@ const TodoItem: React.FC<Props> = ({
         type="checkbox"
         checked={todo.checked}
         onChange={(e) => filterTodo(todo.id)}
-
-        //        onChange={() => handleCheck(todo.id, todo.checked)}
       />
 
       {/* TODOの内容 */}
-      <span>{todo.text}</span>
+      <StyledText checked={todo.checked}>{todo.text}</StyledText>
 
-      <span style={{ marginLeft: "10px", fontSize: "0.8em", color: "#666" }}>
-        登録日時: {todo.createdAt}
-      </span>
+      {/* 登録日時 */}
+      <StyledDate>登録日時: {todo.createdAt}</StyledDate>
 
       {/* 削除ボタン */}
-      <button
+      <StyledButton
         onClick={(e) => {
           e.stopPropagation(); // ← これがポイント！
           deleteTodo(todo.id);
         }}
       >
         削除
-      </button>
+      </StyledButton>
     </li>
   );
 };

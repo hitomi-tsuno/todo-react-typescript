@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Todo } from "./types/todo";
 import { Filter } from "./types/filter";
 import TodoList from "./components/TodoList";
+import StyledButton from "./components/StyledButton";
+import StyledPopup from "./components/StyledPopup";
 
 // フィルターの型定義
 
@@ -154,33 +156,37 @@ const App: React.FC = () => {
       />
 
       {/* 追加ボタン */}
-      <button onClick={addTodo}>追加</button>
+      <StyledButton onClick={addTodo}>追加</StyledButton>
 
       {/* 一括削除ボタン 削除件数＞0の場合のみ一括ボタンを表示する。*/}
       {checkedCount > 0 && (
-        <button onClick={() => setShowPopup(true)}>
+        <StyledButton onClick={() => setShowPopup(true)}>
           一括削除 対象：{checkedCount}件
-        </button>
+        </StyledButton>
       )}
 
       {/* ポップアップコンポーネント */}
       {showPopup && (
-        <div className="popup">
+        <StyledPopup>
           <p>完了済みのタスクをすべて削除しますか？</p>
-          <button onClick={() => alldeleteTodo()}>はい</button>
-          <button onClick={() => setShowPopup(false)}>いいえ</button>
-        </div>
+          <StyledButton onClick={() => alldeleteTodo()}>はい</StyledButton>
+          <StyledButton onClick={() => setShowPopup(false)}>
+            いいえ
+          </StyledButton>
+        </StyledPopup>
       )}
 
       <br />
       {/* 一括完了・未完了ボタン */}
       {todos.length > 0 &&
         (checkedCount === todos.length ? (
-          <button onClick={uncheckAllTodos}>すべて未完了にする</button>
+          <StyledButton onClick={uncheckAllTodos}>
+            すべて未完了にする
+          </StyledButton>
         ) : (
-          <button onClick={checkAllTodos}>すべて完了にする</button>
+          <StyledButton onClick={checkAllTodos}>すべて完了にする</StyledButton>
         ))}
-  
+
       {/* 一覧 */}
       <TodoList
         todos={todos}

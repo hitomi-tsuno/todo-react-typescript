@@ -1,6 +1,5 @@
 import React from "react";
 import { Todo } from "../types/todo";
-import { Filter } from "../types/filter";
 import TodoItem from "./TodoItem";
 
 interface Props {
