@@ -1,11 +1,15 @@
 import styled from "styled-components";
 
-const StyledButton = styled.button<{ variant?: "danger" | "default" }>`
-  background: ${(props) =>
-    props.variant === "danger" ? "#dc3545" : "#007bff"};
+const StyledButton = styled.button`
+  margin: 5px;
+  padding: 8px 12px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+
   &:hover {
-    background: ${(props) =>
-      props.variant === "danger" ? "#a71d2a" : "#0056b3"};
+    background: #0056b3;
   }
 `;
 export default StyledButton;
