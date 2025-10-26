@@ -1,6 +1,6 @@
 import React from "react";
-import { Todo } from "../types/todo";
-import TodoItem from "./TodoItem";
+import { Todo } from "../types/todo"; // TODOの型定義
+import TodoItem from "./TodoItem"; // TodoItemコンポーネント
 
 interface Props {
   todos: Todo[];
@@ -17,15 +17,19 @@ const TodoList: React.FC<Props> = ({
 }) => {
   return (
     <ul>
-      {filteredTodos.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          filteredTodos={todo}
-          deleteTodo={deleteTodo}
-          filterTodo={filterTodo}
-        />
-      ))}
+      <table>
+        <tbody>
+          {filteredTodos.map((todo) => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              filteredTodos={todo}
+              deleteTodo={deleteTodo}
+              filterTodo={filterTodo}
+            />
+          ))}
+        </tbody>
+      </table>
     </ul>
   );
 };

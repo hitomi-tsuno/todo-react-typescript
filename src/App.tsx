@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Todo } from "./types/todo";
-import { Filter } from "./types/filter";
-import TodoList from "./components/TodoList";
-import StyledButton from "./components/StyledButton";
-import StyledPopup from "./components/StyledPopup";
-
-// フィルターの型定義
+import { Todo } from "./types/todo"; // TODOの型定義
+import { Filter } from "./types/filter"; // フィルターの型定義
+import TodoList from "./components/TodoList"; // TodoListコンポーネント
+import StyledButton from "./components/StyledButton"; // スタイリングされたボタンコンポーネント
+import StyledPopup from "./components/StyledPopup"; // スタイリングされたポップアップコンポーネント
+import { GlobalStyle } from "./styles/GlobalStyle"; // グローバルスタイル
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -134,67 +133,73 @@ const App: React.FC = () => {
   });
 
   return (
-    <div>
-      {/* タイトル */}
-      <h1>TODO List</h1>
+    <>
+      <GlobalStyle />
 
-      {/* 全件 / 完了 / 未完了 */}
-      <select
-        defaultValue="all"
-        onChange={(e) => handleFilter(e.target.value as Filter)}
-      >
-        <option value="all">全件</option>
-        <option value="completed">完了</option>
-        <option value="active">未完了</option>
-      </select>
+      <div>
+        {/* タイトル */}
+        <h1>TODO List</h1>
 
-      {/* テキストボックス */}
-      <input
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="新しいTODOを入力"
-      />
+        {/* 全件 / 完了 / 未完了 */}
+        <select
+          defaultValue="all"
+          onChange={(e) => handleFilter(e.target.value as Filter)}
+        >
+          <option value="all">全件</option>
+          <option value="completed">完了</option>
+          <option value="active">未完了</option>
+        </select>
 
-      {/* 追加ボタン */}
-      <StyledButton onClick={addTodo}>追加</StyledButton>
+        {/* テキストボックス */}
+        <input
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="新しいTODOを入力"
+        />
 
-      {/* 一括削除ボタン 削除件数＞0の場合のみ一括ボタンを表示する。*/}
-      {checkedCount > 0 && (
-        <StyledButton onClick={() => setShowPopup(true)}>
-          一括削除 対象：{checkedCount}件
-        </StyledButton>
-      )}
+        {/* 追加ボタン */}
+        <StyledButton onClick={addTodo}>追加</StyledButton>
 
-      {/* ポップアップコンポーネント */}
-      {showPopup && (
-        <StyledPopup>
-          <p>完了済みのタスクをすべて削除しますか？</p>
-          <StyledButton onClick={() => alldeleteTodo()}>はい</StyledButton>
-          <StyledButton onClick={() => setShowPopup(false)}>
-            いいえ
+        {/* 一括削除ボタン 削除件数＞0の場合のみ一括ボタンを表示する。*/}
+        {checkedCount > 0 && (
+          <StyledButton onClick={() => setShowPopup(true)}>
+            一括削除 対象：{checkedCount}件
           </StyledButton>
-        </StyledPopup>
-      )}
+        )}
 
-      <br />
-      {/* 一括完了・未完了ボタン */}
-      {todos.length > 0 &&
-        (checkedCount === todos.length ? (
-          <StyledButton onClick={uncheckAllTodos}>
-            すべて未完了にする
-          </StyledButton>
-        ) : (
-          <StyledButton onClick={checkAllTodos}>すべて完了にする</StyledButton>
-        ))}
+        {/* ポップアップコンポーネント */}
+        {showPopup && (
+          <StyledPopup>
+            <p>完了済みのタスクをすべて削除しますか？</p>
+            <StyledButton onClick={() => alldeleteTodo()}>はい</StyledButton>
+            <StyledButton onClick={() => setShowPopup(false)}>
+              いいえ
+            </StyledButton>
+          </StyledPopup>
+        )}
 
-      {/* 一覧 */}
-      <TodoList
-        todos={todos}
-        filteredTodos={filteredTodos}
-        deleteTodo={deleteTodo}
-        filterTodo={filterTodo}
-      />
-    </div>
+        <br />
+        {/* 一括完了・未完了ボタン */}
+        {todos.length > 0 &&
+          (checkedCount === todos.length ? (
+            <StyledButton onClick={uncheckAllTodos}>
+              すべて未完了にする
+            </StyledButton>
+          ) : (
+            <StyledButton onClick={checkAllTodos}>
+              すべて完了にする
+            </StyledButton>
+          ))}
+
+        {/* 一覧 */}
+        <TodoList
+          todos={todos}
+          filteredTodos={filteredTodos}
+          deleteTodo={deleteTodo}
+          filterTodo={filterTodo}
+        />
+      </div>
+    </>
   );
 };
 
