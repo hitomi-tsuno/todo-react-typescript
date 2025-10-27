@@ -125,12 +125,22 @@ const App: React.FC = () => {
         return todo;
       case "completed":
         return todo.checked;
-      case "active":
+      case "incomplete":
         return !todo.checked;
       default:
         return todo;
     }
   });
+
+  /*
+   * Todo更新処理
+   * 編集完了時に実行
+   */
+  const UpdateTodo = (id: number, newText: string) => {
+    setTodos((prev) =>
+      prev.map((todo) => (todo.id === id ? { ...todo, text: newText } : todo))
+    );
+  };
 
   return (
     <>
@@ -139,34 +149,30 @@ const App: React.FC = () => {
       <div>
         {/* タイトル */}
         <h1>TODO List</h1>
-
-        {/* 全件 / 完了 / 未完了 */}
+        {/* フィルター　全件 / 完了 / 未完了 */}
         <select
           defaultValue="all"
           onChange={(e) => handleFilter(e.target.value as Filter)}
         >
           <option value="all">全件</option>
-          <option value="completed">完了</option>
-          <option value="active">未完了</option>
+          <option value="completed">完了のみ</option>
+          <option value="incomplete">未完了のみ</option>
         </select>
-
+        <br />
         {/* テキストボックス */}
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="新しいTODOを入力"
         />
-
         {/* 追加ボタン */}
         <StyledButton onClick={addTodo}>追加</StyledButton>
-
         {/* 一括削除ボタン 削除件数＞0の場合のみ一括ボタンを表示する。*/}
         {checkedCount > 0 && (
           <StyledButton onClick={() => setShowPopup(true)}>
             一括削除 対象：{checkedCount}件
           </StyledButton>
         )}
-
         {/* ポップアップコンポーネント */}
         {showPopup && (
           <StyledPopup>
@@ -177,7 +183,6 @@ const App: React.FC = () => {
             </StyledButton>
           </StyledPopup>
         )}
-
         <br />
         {/* 一括完了・未完了ボタン */}
         {todos.length > 0 &&
@@ -190,13 +195,13 @@ const App: React.FC = () => {
               すべて完了にする
             </StyledButton>
           ))}
-
         {/* 一覧 */}
         <TodoList
           todos={todos}
           filteredTodos={filteredTodos}
           deleteTodo={deleteTodo}
           filterTodo={filterTodo}
+          UpdateTodo={UpdateTodo}
         />
       </div>
     </>

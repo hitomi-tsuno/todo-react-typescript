@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Todo } from "../types/todo"; // TODOの型定義
 import StyledButton from "../components/StyledButton"; // スタイリングされたボタンコンポーネント
 import StyledDate from "../components/StyledDate"; // スタイリングされた日付コンポーネント
 import StyledText from "../components/StyledText"; // スタイリングされたテキストコンポーネント
+
 interface Props {
   todo: Todo;
   filteredTodos: Todo;
   deleteTodo: (id: number) => void; // propsの型定義
   filterTodo: (id: number) => void; // propsの型定義
+  UpdateTodo: (id: number, newText: string) => void; // propsの型定義
 }
 
 const TodoItem: React.FC<Props> = ({
@@ -15,7 +17,11 @@ const TodoItem: React.FC<Props> = ({
   filteredTodos,
   deleteTodo,
   filterTodo,
+  UpdateTodo,
 }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState(todo.text);
+
   return (
     // <li key={todo.id}>
     <tr key={todo.id}>
@@ -29,7 +35,29 @@ const TodoItem: React.FC<Props> = ({
       </td>
       <td>
         {/* TODOの内容 */}
-        <StyledText checked={todo.checked}>{todo.text}</StyledText>
+        {/* <StyledText checked={todo.checked}>{todo.text}</StyledText> */}
+        {isEditing ? (
+          <input
+            type="text"
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
+            onBlur={() => {
+              UpdateTodo(todo.id, editText); // 親から渡された更新関数
+              setIsEditing(false);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                UpdateTodo(todo.id, editText);
+                setIsEditing(false);
+              }
+            }}
+            autoFocus
+          />
+        ) : (
+          <StyledText checked={todo.checked} onClick={() => setIsEditing(true)}>
+            {todo.text}
+          </StyledText>
+        )}
       </td>
       <td>
         {/* 登録日時 */}

@@ -7,6 +7,7 @@ interface Props {
   filteredTodos: Todo[];
   deleteTodo: (id: number) => void; // propsの型定義
   filterTodo: (id: number) => void; // propsの型定義
+  UpdateTodo: (id: number, newText: string) => void; // propsの型定義
 }
 
 const TodoList: React.FC<Props> = ({
@@ -14,6 +15,7 @@ const TodoList: React.FC<Props> = ({
   filteredTodos,
   deleteTodo,
   filterTodo,
+  UpdateTodo,
 }) => {
   return (
     <ul>
@@ -26,6 +28,7 @@ const TodoList: React.FC<Props> = ({
               filteredTodos={todo}
               deleteTodo={deleteTodo}
               filterTodo={filterTodo}
+              UpdateTodo={UpdateTodo}
             />
           ))}
         </tbody>
