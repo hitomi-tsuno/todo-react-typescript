@@ -11,5 +11,6 @@
 - ✅ 一括削除・全選択・全解除ボタンの追加（2025/10/24）
 - ✅ 登録日時の表示（2025/10/24）
 - ✅ StyledButton / StyledDate / StyledPopup / StyledText の導入 → CSS-in-JS化（2025/10/26）
+- ✅ tableタグを使用して、列を整列する（2025/10/27）
 
 ![代替テキスト](public/image.png)
