@@ -13,5 +13,6 @@
 - ✅ StyledButton / StyledDate / StyledPopup / StyledText の導入 → CSS-in-JS化（2025/10/26）
 - ✅ tableタグを使用して、列を整列する（2025/10/27）
 - ✅ 編集機能の追加（2025/10/27）
+- ✅ useTodos.ts を導入し、状態管理（todos, filter, checkedCount など）を集約（2025/10/28）
 
 ![代替テキスト](public/image.png)
