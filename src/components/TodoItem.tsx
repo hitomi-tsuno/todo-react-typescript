@@ -6,48 +6,47 @@ import StyledText from "../components/StyledText"; // スタイリングされ�
 
 interface Props {
   todo: Todo;
-  filteredTodos: Todo;
+  // filteredTodos: Todo;
   deleteTodo: (id: number) => void; // propsの型定義
-  filterTodo: (id: number) => void; // propsの型定義
-  UpdateTodo: (id: number, newText: string) => void; // propsの型定義
+  toggleTodo: (id: number) => void; // propsの型定義
+  updateTodo: (id: number, newText: string) => void; // propsの型定義
 }
 
 const TodoItem: React.FC<Props> = ({
   todo,
-  filteredTodos,
+  // filteredTodos,
   deleteTodo,
-  filterTodo,
-  UpdateTodo,
+  toggleTodo,
+  updateTodo,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
 
   return (
-    // <li key={todo.id}>
     <tr key={todo.id}>
       <td>
         {/* 完了チェックボックス */}
         <input
           type="checkbox"
           checked={todo.checked}
-          onChange={(e) => filterTodo(todo.id)}
+          onChange={(e) => toggleTodo(todo.id)}
         />
       </td>
+
       <td>
         {/* TODOの内容 */}
-        {/* <StyledText checked={todo.checked}>{todo.text}</StyledText> */}
         {isEditing ? (
           <input
             type="text"
             value={editText}
             onChange={(e) => setEditText(e.target.value)}
             onBlur={() => {
-              UpdateTodo(todo.id, editText); // 親から渡された更新関数
+              updateTodo(todo.id, editText); // 親から渡された更新関数
               setIsEditing(false);
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                UpdateTodo(todo.id, editText);
+                updateTodo(todo.id, editText);
                 setIsEditing(false);
               }
             }}
@@ -59,15 +58,17 @@ const TodoItem: React.FC<Props> = ({
           </StyledText>
         )}
       </td>
+
       <td>
         {/* 登録日時 */}
         <StyledDate>登録日時: {todo.createdAt}</StyledDate>
       </td>
+
       <td>
         {/* 削除ボタン */}
         <StyledButton
           onClick={(e) => {
-            e.stopPropagation(); // ← これがポイント！
+            e.stopPropagation(); 
             deleteTodo(todo.id);
           }}
         >
@@ -75,7 +76,6 @@ const TodoItem: React.FC<Props> = ({
         </StyledButton>
       </td>
     </tr>
-    // </li>
   );
 };
 
