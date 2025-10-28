@@ -1,7 +1,7 @@
 プロジェクト概要（React + TypeScriptで作成したTODOリスト）<br>
 使用技術（React, TypeScript, VSCode）<br>
-機能一覧（追加・削除）<br>
-今後の予定（フィルター機能、ローカル保存など）<br>
+機能一覧（追加・削除・編集）<br>
+今後の予定（ローカル保存など）<br>
 
 ## 更新履歴
 
@@ -12,5 +12,6 @@
 - ✅ 登録日時の表示（2025/10/24）
 - ✅ StyledButton / StyledDate / StyledPopup / StyledText の導入 → CSS-in-JS化（2025/10/26）
 - ✅ tableタグを使用して、列を整列する（2025/10/27）
+- ✅ 編集機能の追加（2025/10/27）
 
 ![代替テキスト](public/image.png)
