@@ -26,10 +26,10 @@ const App: React.FC = () => {
     setShowPopup,
   } = useTodos();
 
-  // フィルター切り替え処理
-  const handleFilter = (filter: Filter) => {
-    setFilter(filter);
-  };
+  // // フィルター切り替え処理
+  // const handleFilter = (filter: Filter) => {
+  //   setFilter(filter);
+  // };
 
   return (
     <>
@@ -39,62 +39,81 @@ const App: React.FC = () => {
         {/* タイトル */}
         <h1>TODO List</h1>
 
-        {/* フィルター　全件 / 完了 / 未完了 */}
-        <select
-          defaultValue="all"
-          onChange={(e) => handleFilter(e.target.value as Filter)}
-        >
-          <option value="all">全件</option>
-          <option value="completed">完了のみ</option>
-          <option value="incomplete">未完了のみ</option>
-        </select>
-        <br />
+        <div>
+          {/* フィルター　全件 / 完了 / 未完了 */}
+          フィルター：
+          <select
+            value={filter}
+            onChange={(e) => setFilter(e.target.value as Filter)}
+          >
+            <option value="all">全件</option>
+            <option value="completed">完了のみ</option>
+            <option value="incomplete">未完了のみ</option>
+          </select>
+        </div>
 
-        {/* テキストボックス */}
-        <input
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="新しいTODOを入力"
-        />
+        <div>
+          {/* テキストボックス */}
+          <input
+            aria-label="新しいTODOを入力"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="新しいTODOを入力"
+          />
 
-        {/* 追加ボタン */}
-        <StyledButton
-          onClick={() => {
-            addTodo(text); // TODOを追加
-            setText(""); // 入力欄をクリア ← これがポイント！
-          }}
-        >
-          追加
-        </StyledButton>
-
-        {/* 一括削除ボタン 削除件数＞0の場合のみ一括ボタンを表示する。*/}
-        {checkedCount > 0 && (
-          <StyledButton onClick={() => setShowPopup(true)}>
-            一括削除 対象：{checkedCount}件
+          {/* 追加ボタン */}
+          <StyledButton
+            onClick={() => {
+              if (text.trim() === "") return; // 空文字は追加しない
+              addTodo(text); // TODOを追加
+              setText(""); // 入力欄をクリア ← これがポイント！
+            }}
+          >
+            追加
           </StyledButton>
-        )}
 
-        {/* ポップアップコンポーネント
-        一括削除ボタンクリック時に表示されます */}
-        {showPopup && (
-          <StyledPopup>
-            <p>完了済みのタスクをすべて削除しますか？</p>
-            <StyledButton onClick={() => deleteChecked()}>はい</StyledButton>
-            <StyledButton onClick={() => setShowPopup(false)}>
-              いいえ
+          {/* 一括削除ボタン 削除件数＞0の場合のみ一括ボタンを表示する。*/}
+          {checkedCount > 0 && (
+            <StyledButton
+              onClick={() => setShowPopup(true)}
+              title="完了でチェック済の行を削除します"
+            >
+              一括削除 対象：{checkedCount}件
             </StyledButton>
-          </StyledPopup>
-        )}
-        <br />
+          )}
 
-        {/* 一括完了・未完了ボタン どちらかを表示する*/}
-        {todos.length > 0 &&
-          (checkedCount === todos.length ? (
-            <StyledButton onClick={uncheckAll}>すべて未完了にする</StyledButton>
-          ) : (
-            <StyledButton onClick={checkAll}>すべて完了にする</StyledButton>
-          ))}
-        <br />
+          {/* ポップアップコンポーネント
+        一括削除ボタンクリック時に表示されます */}
+          {showPopup && (
+            <StyledPopup>
+              <p>完了済みのタスクをすべて削除しますか？</p>
+              <StyledButton onClick={() => deleteChecked()}>はい</StyledButton>
+              <StyledButton onClick={() => setShowPopup(false)}>
+                いいえ
+              </StyledButton>
+            </StyledPopup>
+          )}
+        </div>
+
+        <div>
+          {/* 一括完了・未完了ボタン どちらかを表示する*/}
+          {todos.length > 0 &&
+            (checkedCount === todos.length ? (
+              <StyledButton
+                onClick={uncheckAll}
+                title="完了をすべて未チェックとする"
+              >
+                すべて未完了にする
+              </StyledButton>
+            ) : (
+              <StyledButton
+                onClick={checkAll}
+                title="完了をすべてチェックとする"
+              >
+                すべて完了にする
+              </StyledButton>
+            ))}
+        </div>
 
         {/* 一覧 */}
         <TodoList

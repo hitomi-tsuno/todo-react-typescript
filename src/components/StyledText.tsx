@@ -1,4 +1,3 @@
-// 例：TodoText.tsx または TodoItem.tsx 内で定義
 import styled from "styled-components";
 
 const StyledText = styled.span<{ checked: boolean }>`

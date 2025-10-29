@@ -6,7 +6,6 @@ import StyledText from "../components/StyledText"; // スタイリングされ�
 
 interface Props {
   todo: Todo;
-  // filteredTodos: Todo;
   deleteTodo: (id: number) => void; // propsの型定義
   toggleTodo: (id: number) => void; // propsの型定義
   updateTodo: (id: number, newText: string) => void; // propsの型定義
@@ -14,16 +13,23 @@ interface Props {
 
 const TodoItem: React.FC<Props> = ({
   todo,
-  // filteredTodos,
   deleteTodo,
   toggleTodo,
   updateTodo,
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editText, setEditText] = useState(todo.text);
+  const [isEditing, setIsEditing] = useState(false); // 編集モードの状態管理
+  const [editText, setEditText] = useState(todo.text); // 編集中のテキスト管理
+
+  // 編集確定処理
+  const handleUpdate = () => {
+    const trimmed = editText.trim();
+    if (trimmed === "") return;
+    updateTodo(todo.id, trimmed);
+    setIsEditing(false);
+  };
 
   return (
-    <tr key={todo.id}>
+    <tr>
       <td>
         {/* 完了チェックボックス */}
         <input
@@ -40,20 +46,18 @@ const TodoItem: React.FC<Props> = ({
             type="text"
             value={editText}
             onChange={(e) => setEditText(e.target.value)}
-            onBlur={() => {
-              updateTodo(todo.id, editText); // 親から渡された更新関数
-              setIsEditing(false);
-            }}
+            onBlur={handleUpdate}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                updateTodo(todo.id, editText);
-                setIsEditing(false);
-              }
+              if (e.key === "Enter") handleUpdate();
             }}
             autoFocus
           />
         ) : (
-          <StyledText checked={todo.checked} onClick={() => setIsEditing(true)}>
+          <StyledText
+            checked={todo.checked}
+            onClick={() => setIsEditing(true)}
+            title="クリックして編集"
+          >
             {todo.text}
           </StyledText>
         )}
@@ -66,14 +70,16 @@ const TodoItem: React.FC<Props> = ({
 
       <td>
         {/* 削除ボタン */}
-        <StyledButton
-          onClick={(e) => {
-            e.stopPropagation(); 
-            deleteTodo(todo.id);
-          }}
-        >
-          削除
-        </StyledButton>
+        {isEditing && (
+          <StyledButton
+            onClick={(e) => {
+              e.stopPropagation();
+              deleteTodo(todo.id);
+            }}
+          >
+            削除
+          </StyledButton>
+        )}
       </td>
     </tr>
   );

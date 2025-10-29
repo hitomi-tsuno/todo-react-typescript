@@ -17,17 +17,32 @@ const TodoList: React.FC<Props> = ({
 }) => {
   return (
     <table>
+      {/* ヘッダ部 */}
+      <thead>
+        <tr>
+          <th>完了</th>
+          <th>内容</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+
+      {/* ボディ部 */}
       <tbody>
-        {filteredTodos.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            // filteredTodos={todo}
-            deleteTodo={deleteTodo}
-            toggleTodo={toggleTodo}
-            updateTodo={updateTodo}
-          />
-        ))}
+        {filteredTodos.length === 0 ? (
+          <tr>
+            <td colSpan={3}>表示するTODOがありません</td>
+          </tr>
+        ) : (
+          filteredTodos.map((todo) => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              deleteTodo={deleteTodo}
+              toggleTodo={toggleTodo}
+              updateTodo={updateTodo}
+            />
+          ))
+        )}
       </tbody>
     </table>
   );

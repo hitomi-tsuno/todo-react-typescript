@@ -1,17 +1,22 @@
 // src/hooks/useTodos.ts
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Todo } from "../types/todo";
 import { Filter } from "../types/filter";
-
 
 export const useTodos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>("all");
-  const [isInitialized, setIsInitialized] = useState(false);
- const [showPopup, setShowPopup] = useState(false); // ポップアップの表示状態
+  const isInitialized = useRef(false);
+  const [showPopup, setShowPopup] = useState(false); // ポップアップの表示状態
+  const checkedCount = useMemo(
+    () => todos.filter((t) => t.checked).length,
+    [todos]
+  ); // チェックされたToDoの数
 
   // 初期読み込み
   useEffect(() => {
+    if (isInitialized.current) return;
+
     const stored = localStorage.getItem("todos");
     if (stored) {
       try {
@@ -21,27 +26,27 @@ export const useTodos = () => {
         console.error("Failed to parse todos:", e);
       }
     }
-    setIsInitialized(true);
+
+    isInitialized.current = true;
   }, []);
 
   // 保存処理
   useEffect(() => {
-    if (isInitialized) {
-      localStorage.setItem("todos", JSON.stringify(todos));
-    }
-  }, [todos, isInitialized]);
+    if (!isInitialized.current) return;
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   // 追加
-const addTodo = (text: string) => {
-  if (!text.trim()) return;
-  const newTodo: Todo = {
-    id: Date.now(),
-    text,
-    checked: false,
-    createdAt: new Date().toLocaleString(),
+  const addTodo = (text: string) => {
+    if (!text.trim()) return;
+    const newTodo: Todo = {
+      id: Date.now(),
+      text,
+      checked: false,
+      createdAt: new Date().toISOString(),
+    };
+    setTodos((prev) => [...prev, newTodo]);
   };
-  setTodos((prev) => [...prev, newTodo]);
-};
 
   // 削除
   const deleteTodo = (id: number) => {
@@ -60,16 +65,14 @@ const addTodo = (text: string) => {
   // 編集
   const updateTodo = (id: number, newText: string) => {
     setTodos((prev) =>
-      prev.map((todo) =>
-        todo.id === id ? { ...todo, text: newText } : todo
-      )
+      prev.map((todo) => (todo.id === id ? { ...todo, text: newText } : todo))
     );
   };
 
   // 一括削除
   const deleteChecked = () => {
     setTodos((prev) => prev.filter((todo) => !todo.checked));
-    setShowPopup(false)
+    setShowPopup(false);
   };
 
   // 一括完了・未完了
@@ -81,11 +84,17 @@ const addTodo = (text: string) => {
   };
 
   // フィルター処理
-  const filteredTodos = todos.filter((todo) => {
-    if (filter === "completed") return todo.checked;
-    if (filter === "incomplete") return !todo.checked;
-    return true;
-  });
+  const applyFilter = (todos: Todo[], filter: Filter) => {
+    switch (filter) {
+      case "completed":
+        return todos.filter((t) => t.checked);
+      case "incomplete":
+        return todos.filter((t) => !t.checked);
+      default:
+        return todos;
+    }
+  };
+  const filteredTodos = applyFilter(todos, filter);
 
   return {
     todos,
@@ -99,7 +108,7 @@ const addTodo = (text: string) => {
     deleteChecked,
     checkAll,
     uncheckAll,
-    checkedCount: todos.filter((t) => t.checked).length,
+    checkedCount,
     showPopup,
     setShowPopup,
   };
