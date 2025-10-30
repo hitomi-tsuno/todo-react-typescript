@@ -95,32 +95,15 @@ const App: React.FC = () => {
           )}
         </div>
 
-        <div>
-          {/* 一括完了・未完了ボタン どちらかを表示する*/}
-          {todos.length > 0 &&
-            (checkedCount === todos.length ? (
-              <StyledButton
-                onClick={uncheckAll}
-                title="完了をすべて未チェックとする"
-              >
-                すべて未完了にする
-              </StyledButton>
-            ) : (
-              <StyledButton
-                onClick={checkAll}
-                title="完了をすべてチェックとする"
-              >
-                すべて完了にする
-              </StyledButton>
-            ))}
-        </div>
-
         {/* 一覧 */}
         <TodoList
           filteredTodos={filteredTodos}
           deleteTodo={deleteTodo}
           toggleTodo={toggleTodo}
           updateTodo={updateTodo}
+          checkedCount={checkedCount}
+          checkAll={checkAll}
+          uncheckAll={uncheckAll}
         />
       </div>
     </>

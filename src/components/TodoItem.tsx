@@ -70,16 +70,14 @@ const TodoItem: React.FC<Props> = ({
 
       <td>
         {/* 削除ボタン */}
-        {isEditing && (
-          <StyledButton
-            onClick={(e) => {
-              e.stopPropagation();
-              deleteTodo(todo.id);
-            }}
-          >
-            削除
-          </StyledButton>
-        )}
+        <StyledButton
+          onClick={(e) => {
+            e.stopPropagation();
+            deleteTodo(todo.id);
+          }}
+        >
+          削除
+        </StyledButton>
       </td>
     </tr>
   );

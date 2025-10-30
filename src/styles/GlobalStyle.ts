@@ -4,7 +4,7 @@ export const GlobalStyle = createGlobalStyle`
   /* CSSリセットやその他のグローバルスタイルをここに記述 */
   /* 例: */
   body {
-    background-color: #f0f0f0; /* 全体の背景色を設定 */
+    background-color: white; /* 全体の背景色を設定 */
     margin: 0;
     padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
