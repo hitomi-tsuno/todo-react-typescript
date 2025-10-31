@@ -58,6 +58,12 @@ const App: React.FC = () => {
             aria-label="新しいTODOを入力"
             value={text}
             onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && text.trim() !== "") {
+                addTodo(text.trim());
+                setText("");
+              }
+            }}
             placeholder="新しいTODOを入力"
           />
 

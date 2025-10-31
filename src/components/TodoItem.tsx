@@ -1,3 +1,4 @@
+// src/components/TodoItem.tsx
 import React, { useState } from "react";
 import { Todo } from "../types/todo"; // TODOの型定義
 import StyledButton from "../components/StyledButton"; // スタイリングされたボタンコンポーネント
@@ -71,8 +72,9 @@ const TodoItem: React.FC<Props> = ({
       <td>
         {/* 削除ボタン */}
         <StyledButton
-          onClick={(e) => {
-            e.stopPropagation();
+          // onClickだとフォーカスが外れてしまうため、onMouseDownで対応
+          onMouseDown={(e) => {
+            e.preventDefault(); // フォーカスを維持
             deleteTodo(todo.id);
           }}
         >
