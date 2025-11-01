@@ -5,38 +5,51 @@ import StyledTableHeader from "./StyledTableHeader"; // スタイリングされ
 
 interface Props {
   filteredTodos: Todo[];
+  sortedTodos: Todo[];
   deleteTodo: (id: number) => void; // propsの型定義
   toggleTodo: (id: number) => void; // propsの型定義
   updateTodo: (id: number, newText: string) => void; // propsの型定義
   checkedCount: number;
   checkAll: () => void;
   uncheckAll: () => void;
+  handleSort: (key: "completed" | "text" | "createdAt") => void;
+  sortKey: string;
+  sortOrder: "asc" | "desc";
 }
 
 const TodoList: React.FC<Props> = ({
   filteredTodos,
+  sortedTodos,
   deleteTodo,
   toggleTodo,
   updateTodo,
   checkedCount,
   checkAll,
   uncheckAll,
+  handleSort,
+  sortKey,
+  sortOrder,
 }) => {
   return (
     <table>
       {/* ヘッダ部 */}
       <thead>
         <tr>
-          <StyledTableHeader>
+          <StyledTableHeader onClick={() => handleSort("completed")}>
             <input
               type="checkbox"
               checked={checkedCount === filteredTodos.length}
               onChange={(e) => (e.target.checked ? checkAll() : uncheckAll())}
             />
-            完了
+            完了{sortKey === "completed" && (sortOrder === "asc" ? "▲" : "▼")}
           </StyledTableHeader>
-          <StyledTableHeader>内容</StyledTableHeader>
-          <StyledTableHeader>登録日時</StyledTableHeader>
+          <StyledTableHeader onClick={() => handleSort("text")}>
+            内容 {sortKey === "text" && (sortOrder === "asc" ? "▲" : "▼")}
+          </StyledTableHeader>
+          <StyledTableHeader onClick={() => handleSort("createdAt")}>
+            登録日時
+            {sortKey === "createdAt" && (sortOrder === "asc" ? "▲" : "▼")}
+          </StyledTableHeader>
           <StyledTableHeader>操作</StyledTableHeader>
         </tr>
       </thead>
@@ -48,7 +61,7 @@ const TodoList: React.FC<Props> = ({
             <td colSpan={3}>表示するTODOがありません</td>
           </tr>
         ) : (
-          filteredTodos.map((todo) => (
+          sortedTodos.map((todo) => (
             <TodoItem
               key={todo.id}
               todo={todo}

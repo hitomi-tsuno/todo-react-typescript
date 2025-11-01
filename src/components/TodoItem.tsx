@@ -35,7 +35,7 @@ const TodoItem: React.FC<Props> = ({
         {/* 完了チェックボックス */}
         <input
           type="checkbox"
-          checked={todo.checked}
+          checked={todo.completed}
           onChange={(e) => toggleTodo(todo.id)}
         />
       </td>
@@ -55,7 +55,7 @@ const TodoItem: React.FC<Props> = ({
           />
         ) : (
           <StyledText
-            checked={todo.checked}
+            checked={todo.completed}
             onClick={() => setIsEditing(true)}
             title="クリックして編集"
           >

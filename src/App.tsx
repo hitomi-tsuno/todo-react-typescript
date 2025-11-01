@@ -10,8 +10,8 @@ const App: React.FC = () => {
   const [text, setText] = useState(""); // 入力中のテキスト
 
   const {
-    todos,
     filteredTodos,
+    sortedTodos,
     filter,
     setFilter,
     addTodo,
@@ -24,12 +24,10 @@ const App: React.FC = () => {
     checkedCount,
     showPopup,
     setShowPopup,
+    handleSort,
+    sortKey,
+    sortOrder,
   } = useTodos();
-
-  // // フィルター切り替え処理
-  // const handleFilter = (filter: Filter) => {
-  //   setFilter(filter);
-  // };
 
   return (
     <>
@@ -104,12 +102,16 @@ const App: React.FC = () => {
         {/* 一覧 */}
         <TodoList
           filteredTodos={filteredTodos}
+          sortedTodos={sortedTodos}
           deleteTodo={deleteTodo}
           toggleTodo={toggleTodo}
           updateTodo={updateTodo}
           checkedCount={checkedCount}
           checkAll={checkAll}
           uncheckAll={uncheckAll}
+          handleSort={handleSort}
+          sortKey={sortKey}
+          sortOrder={sortOrder}
         />
       </div>
     </>
