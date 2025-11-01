@@ -99,7 +99,10 @@ export const useTodos = () => {
         return todos;
     }
   };
-  const filteredTodos = applyFilter(todos, filter);
+  const filteredTodos = useMemo(
+    () => applyFilter(todos, filter),
+    [todos, filter]
+  );
 
   // ソート処理
   const sortedTodos = [...filteredTodos].sort((a, b) => {
@@ -118,6 +121,7 @@ export const useTodos = () => {
     return sortOrder === "asc" ? compare : -compare;
   });
 
+  // ソートキー・順序の設定
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
       // 同じキーなら昇順⇔降順を切り替え
