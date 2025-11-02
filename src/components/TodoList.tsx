@@ -1,3 +1,4 @@
+// src/components/TodoList.tsx
 import React from "react";
 import { Todo } from "../types/todo"; // TODOの型定義
 import TodoItem from "./TodoItem"; // TodoItemコンポーネント
@@ -42,18 +43,19 @@ const TodoList: React.FC<Props> = ({
               checked={checkedCount === filteredTodos.length}
               onChange={(e) => (e.target.checked ? checkAll() : uncheckAll())}
             />
-            完了{sortKey === "completed" && (sortOrder === "asc" ? "▲" : "▼")}
+            完了
+            {sortKey === "completed" ? (sortOrder === "asc" ? "▲" : "▼") : "⇅"}{" "}
           </StyledTableHeader>
 
           {/* ＜内容＞ */}
           <StyledTableHeader onClick={() => handleSort("text")}>
-            内容 {sortKey === "text" && (sortOrder === "asc" ? "▲" : "▼")}
+            内容 {sortKey === "text" ? (sortOrder === "asc" ? "▲" : "▼") : "⇅"}
           </StyledTableHeader>
 
           {/* ＜登録日時＞ */}
           <StyledTableHeader onClick={() => handleSort("createdAt")}>
             登録日時
-            {sortKey === "createdAt" && (sortOrder === "asc" ? "▲" : "▼")}
+            {sortKey === "createdAt" ? (sortOrder === "asc" ? "▲" : "▼"): "⇅"}
           </StyledTableHeader>
 
           {/* ＜操作＞ */}
