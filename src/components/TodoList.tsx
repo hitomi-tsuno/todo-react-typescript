@@ -35,6 +35,7 @@ const TodoList: React.FC<Props> = ({
       {/* ヘッダ部 */}
       <thead>
         <tr>
+          {/* ＜完了＞ */}
           <StyledTableHeader onClick={() => handleSort("completed")}>
             <input
               type="checkbox"
@@ -43,13 +44,19 @@ const TodoList: React.FC<Props> = ({
             />
             完了{sortKey === "completed" && (sortOrder === "asc" ? "▲" : "▼")}
           </StyledTableHeader>
+
+          {/* ＜内容＞ */}
           <StyledTableHeader onClick={() => handleSort("text")}>
             内容 {sortKey === "text" && (sortOrder === "asc" ? "▲" : "▼")}
           </StyledTableHeader>
+
+          {/* ＜登録日時＞ */}
           <StyledTableHeader onClick={() => handleSort("createdAt")}>
             登録日時
             {sortKey === "createdAt" && (sortOrder === "asc" ? "▲" : "▼")}
           </StyledTableHeader>
+
+          {/* ＜操作＞ */}
           <StyledTableHeader>操作</StyledTableHeader>
         </tr>
       </thead>

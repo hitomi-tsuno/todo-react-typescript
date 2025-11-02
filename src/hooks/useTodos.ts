@@ -27,6 +27,7 @@ export const useTodos = () => {
       try {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) setTodos(parsed);
+        console.log("[useEffect初期読み込み]parsed:", parsed); // ← これが配列として表示される！
       } catch (e) {
         console.error("Failed to parse todos:", e);
       }
@@ -39,10 +40,12 @@ export const useTodos = () => {
   useEffect(() => {
     if (!isInitialized.current) return;
     localStorage.setItem("todos", JSON.stringify(todos));
+    console.log("[useEffect保存]todos:", todos);
   }, [todos]);
 
   // 追加
   const addTodo = (text: string) => {
+    console.log("追加前のtodos:", todos);
     if (!text.trim()) return;
     const newTodo: Todo = {
       id: Date.now(),
@@ -55,6 +58,7 @@ export const useTodos = () => {
 
   // 削除
   const deleteTodo = (id: number) => {
+    console.log("削除前のtodos:", todos);
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
 
@@ -76,6 +80,7 @@ export const useTodos = () => {
 
   // 一括削除
   const deleteChecked = () => {
+    console.log("一括削除前のtodos:", todos);
     setTodos((prev) => prev.filter((todo) => !todo.completed));
     setShowPopup(false);
   };
@@ -90,36 +95,52 @@ export const useTodos = () => {
 
   // フィルター処理
   const applyFilter = (todos: Todo[], filter: Filter) => {
+    let result: Todo[];
+
     switch (filter) {
       case "completed":
-        return todos.filter((t) => t.completed);
+        result = todos.filter((t) => t.completed);
+        break;
       case "incomplete":
-        return todos.filter((t) => !t.completed);
+        result = todos.filter((t) => !t.completed);
+        break;
       default:
-        return todos;
+        result = todos;
     }
+
+    console.log(`[applyFilter] filter: ${filter}, result:`, result);
+    return result;
   };
-  const filteredTodos = useMemo(
-    () => applyFilter(todos, filter),
-    [todos, filter]
-  );
+
+  const filteredTodos = useMemo(() => {
+    const result = applyFilter(todos, filter);
+    return result;
+  }, [todos, filter]);
 
   // ソート処理
-  const sortedTodos = [...filteredTodos].sort((a, b) => {
-    let compare = 0;
-    switch (sortKey) {
-      case "completed":
-        compare = Number(a.completed) - Number(b.completed);
-        break;
-      case "text":
-        compare = a.text.localeCompare(b.text);
-        break;
-      case "createdAt":
-        compare = a.createdAt.localeCompare(b.createdAt);
-        break;
-    }
-    return sortOrder === "asc" ? compare : -compare;
-  });
+  const sortedTodos = useMemo(() => {
+    const result = [...filteredTodos].sort((a, b) => {
+      let compare = 0;
+      switch (sortKey) {
+        case "completed":
+          compare = Number(a.completed) - Number(b.completed);
+          break;
+        case "text":
+          compare = a.text.localeCompare(b.text);
+          break;
+        case "createdAt":
+          compare = a.createdAt.localeCompare(b.createdAt);
+          break;
+      }
+      return sortOrder === "asc" ? compare : -compare;
+    });
+
+    console.log(
+      `[sortedTodos] sortKey: ${sortKey}, sortOrder: ${sortOrder}, result:`,
+      result
+    );
+    return result;
+  }, [filteredTodos, sortKey, sortOrder]);
 
   // ソートキー・順序の設定
   const handleSort = (key: SortKey) => {

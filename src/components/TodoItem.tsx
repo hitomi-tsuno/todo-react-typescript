@@ -23,6 +23,7 @@ const TodoItem: React.FC<Props> = ({
 
   // 編集確定処理
   const handleUpdate = () => {
+    console.log("[handleUpdate:内容編集確定] editText:", editText);
     const trimmed = editText.trim();
     if (trimmed === "") return;
     updateTodo(todo.id, trimmed);
@@ -32,7 +33,7 @@ const TodoItem: React.FC<Props> = ({
   return (
     <tr>
       <td>
-        {/* 完了チェックボックス */}
+        {/* ＜完了＞チェックボックス */}
         <input
           type="checkbox"
           checked={todo.completed}
@@ -41,7 +42,7 @@ const TodoItem: React.FC<Props> = ({
       </td>
 
       <td>
-        {/* TODOの内容 */}
+        {/* ＜TODOの内容＞テキストボックス　または　text */}
         {isEditing ? (
           <input
             type="text"
@@ -65,12 +66,12 @@ const TodoItem: React.FC<Props> = ({
       </td>
 
       <td>
-        {/* 登録日時 */}
+        {/* ＜登録日時＞ */}
         <StyledDate>登録日時: {todo.createdAt}</StyledDate>
       </td>
 
       <td>
-        {/* 削除ボタン */}
+        {/* ＜削除＞ボタン */}
         <StyledButton
           // onClickだとフォーカスが外れてしまうため、onMouseDownで対応
           onMouseDown={(e) => {
